@@ -1,0 +1,165 @@
+#	Topic	Category	Level	Status	Source
+1	Multi-Digit Addition	Basic Arithmetic	Elem	done	test
+2	Multi-Digit Subtraction	Basic Arithmetic	Elem	done	test
+3	Basic Multiplication	Basic Arithmetic	Elem	done	test
+4	Basic Division	Basic Arithmetic	Elem	done	test
+5	Decimal Arithmetic	Basic Arithmetic	Elem	done	test
+6	Order of Operations	Basic Arithmetic	Elem	done	test
+7	Rounding Numbers	Basic Arithmetic	Elem	done	test
+8	Place Value & Expanded Form	Basic Arithmetic	Elem	done	test
+9	Counting in a Range	Basic Arithmetic	Elem	done	test
+10	Averages (Mean)	Basic Arithmetic	Elem	done	test
+11	Multiply by 11	Mult Tricks – Basic	Elem	done	§1.2.1
+12	Multiply by 101	Mult Tricks – Basic	Elem	done	§1.2.2
+13	Multiply by 25	Mult Tricks – Basic	Elem	done	§1.2.3
+14	Multiply by 75	Mult Tricks – Basic	Elem	done	§1.2.4
+15	Multiply by fraction of 100/1000	Mult Tricks – Basic	Elem	done	§1.2.5
+16	Multiply by 50	Mult Tricks – Basic	Elem	done	§1.2.5
+17	Multiply by 125	Mult Tricks – Basic	Elem	done	§1.2.5
+18	Double and Half	Mult Tricks – Basic	Elem	done	§1.2.6
+19	Numbers Near 100	Mult Tricks – Basic	Elem	done	§1.2.7
+20	Squares Ending in 5	Mult Tricks – Basic	Elem	done	§1.2.8
+21	Squares 41–59 (near-50 trick)	Mult Tricks – Basic	Mid	new	§1.2.9
+22	Equidistant from a Third (diff of squares)	Mult Tricks – Basic	Elem	done	§1.2.10
+23	Multiplying Reverses	Mult Tricks – Basic	Mid	new	§1.2.11
+24	FOILing / Extending FOIL	Mult Tricks – Standard	Elem	done	§1.3.1
+25	Factoring Algebraically	Mult Tricks – Standard	Mid	done	§1.3.2
+26	Sum of Consecutive Squares	Mult Tricks – Standard	Mid	new	§1.3.3
+27	Sum of Squares – Factoring Method	Mult Tricks – Standard	Mid	new	§1.3.4
+28	Sum of Squares – Special Case	Mult Tricks – Standard	Mid	new	§1.3.5
+29	Difference of Squares	Mult Tricks – Standard	Elem	done	§1.3.6
+30	Multiplying Two Numbers Ending in 5	Mult Tricks – Standard	Elem	new	§1.3.7
+31	Multiplying Mixed Numbers	Mult Tricks – Standard	Mid	done	§1.3.8
+32	a × (a/b) Trick	Mult Tricks – Standard	Mid	new	§1.3.9
+33	Combination of Tricks	Mult Tricks – Standard	Mid	new	§1.3.10
+34	Remainder – Divide by 4, 8, 16…	Division Tricks	Mid	new	§1.4.1
+35	Remainder – Divide by 3, 9, 27…	Division Tricks	Mid	new	§1.4.2
+36	Remainder – Divide by 11	Division Tricks	Mid	new	§1.4.3
+37	Remainder – Other Integers	Division Tricks	Mid	new	§1.4.4
+38	Remainders of Expressions	Division Tricks	Mid	new	§1.4.5
+39	Dividing by 9 (mixed number trick)	Division Tricks	Mid	new	§1.4.6
+40	Converting a/40, b/80 to Decimals	Division Tricks	Mid	new	§1.4.7
+41	Subtracting Reverses	Add/Sub Tricks	Mid	new	§1.5.1
+42	Switching & Negating on Subtraction	Add/Sub Tricks	Mid	new	§1.5.2
+43	Telescoping Fraction Sums	Add/Sub Tricks	HS	new	§1.5.3
+44	a/b + b/a Trick	Add/Sub Tricks	Mid	new	§1.5.4
+45	a/b − (na−1)/(nb+1)	Add/Sub Tricks	HS	new	§1.5.5
+46	Squares (memorized 1–30)	Memorization	Elem	new	§2.1.1
+47	Cubes (memorized 1–12)	Memorization	Elem	new	§2.1.2
+48	Powers of 2, 3, 5	Memorization	Elem	new	§2.1.3
+49	Important Fractions (1/7, 1/9, 1/11…)	Memorization	Elem	new	§2.1.4
+50	Special Integers (perfect, amicable…)	Memorization	HS	new	§2.1.5
+51	Roman Numerals	Memorization	Elem	new	§2.1.6
+52	Platonic Solids & Euler's Formula	Memorization	Mid	new	§2.1.7
+53	π and e Approximations	Memorization	HS	new	§2.1.8
+54	Distance & Velocity Conversions	Conversions	Mid	new	§2.1.9
+55	Distance → Area → Volume Conversions	Conversions	Elem	new	§2.1.10
+56	Fluid & Weight Conversions	Conversions	Elem	new	§2.1.11
+57	Celsius ↔ Fahrenheit	Conversions	Mid	new	§2.1.12
+58	Arithmetic Series Sum	Series & Sequences	Elem	new	§2.2.1
+59	Geometric Series (finite)	Series & Sequences	Mid	new	§2.2.1
+60	Infinite Geometric Series	Series & Sequences	HS	new	§2.2.1
+61	Sum of Odd Integers	Series & Sequences	Elem	new	§2.2.1
+62	Fibonacci-Like Sequences	Series & Sequences	Mid	new	§2.2.2
+63	Integral Divisors	Number Theory	Elem	new	§2.2.3
+64	Number of Diagonals of a Polygon	Geometry	Mid	new	§2.2.4
+65	Interior / Exterior Angles of Polygons	Geometry	Elem	new	§2.2.5
+66	Triangular Numbers	Number Patterns	Elem	new	§2.2.6
+67	Pentagonal & Figurate Numbers	Number Patterns	Mid	new	§2.2.6
+68	Pythagorean Theorem & Triples	Geometry	Elem	new	§2.2.7
+69	Equilateral Triangle Formulas	Geometry	Mid	new	§2.2.8
+70	Volume of Solids (cone, sphere, cyl…)	Geometry	Mid	new	§2.2.9
+71	Combinations & Permutations	Sets & Probability	Mid	new	§2.2.10
+72	Trig Values (unit circle)	Trigonometry	HS	new	§2.2.11
+73	Trig Identities & Formulas	Trigonometry	HS	new	§2.2.12
+74	Graphs of Sine/Cosine	Trigonometry	HS	new	§2.2.13
+75	Vertex of a Parabola	Algebra	HS	new	§2.2.14
+76	Discriminant & Nature of Roots	Algebra	HS	new	§2.2.15
+77	GCD & LCM	Number Theory	Elem	new	§3.1.1
+78	Perfect, Abundant & Deficient Numbers	Number Theory	HS	new	§3.1.2
+79	Sum & Product of Binomial Coefficients	Advanced Algebra	HS	new	§3.1.3
+80	Sum/Product of Roots (Vieta's)	Algebra	HS	new	§3.1.4
+81	Units Digit of xⁿ	Number Theory	Mid	new	§3.1.5
+82	Exponent Rules	Advanced Algebra	HS	new	§3.1.6
+83	Log Rules	Advanced Algebra	HS	new	§3.1.7
+84	Square Root Problems (simplify)	Radicals	Mid	new	§3.1.8
+85	Approximating Square Roots	Radicals	Mid	new	§3.1.9
+86	Complex Numbers (a+bi)	Advanced Algebra	HS	new	§3.1.10
+87	Function Inverses	Algebra	HS	new	§3.1.11
+88	Patterns (cyclic & number)	Number Patterns	Mid	new	§3.1.12
+89	Probability & Odds	Sets & Probability	Elem	new	§3.1.13
+90	Sets – Union, Intersection, Complement	Sets & Probability	Elem	new	§3.1.14
+91	Base Conversion – Integers	Number Bases	Mid	new	§3.2.1
+92	Base Conversion – Decimals	Number Bases	Mid	new	§3.2.2
+93	Arithmetic in Other Bases	Number Bases	Mid	new	§3.2.3
+94	Base Conversion – Special Case (2↔8, 2↔16)	Number Bases	Mid	new	§3.2.4
+95	Base Conversion – Sum of Powers	Number Bases	HS	new	§3.2.5
+96	Base Conversion – Misc Topics	Number Bases	HS	new	§3.2.6
+97	Repeating Decimals – .aaaa form	Repeating Decimals	Mid	new	§3.3.1
+98	Repeating Decimals – .abab form	Repeating Decimals	Mid	new	§3.3.2
+99	Repeating Decimals – .abbb form	Repeating Decimals	Mid	new	§3.3.3
+100	Repeating Decimals – .abcbc form	Repeating Decimals	HS	new	§3.3.4
+101	Modular Arithmetic (congruences)	Number Theory	HS	new	§3.4
+102	Factorials – n·n! sum	Factorials	HS	new	§3.5.1
+103	Factorials – a!±b!/c!	Factorials	HS	new	§3.5.2
+104	Wilson's Theorem	Factorials	HS	new	§3.5.3
+105	Limits	Calculus	HS	new	§3.6.1
+106	Derivatives	Calculus	HS	new	§3.6.2
+107	Integration (definite integrals)	Calculus	HS	new	§3.6.3
+108	Multiplying 3-digit × 2-digit	Mult Tricks – 2018	Mid	new	§4.1.1
+109	Multiplying 3-digit × 3-digit	Mult Tricks – 2018	Mid	new	§4.1.2
+110	Units Add to 10, Same Tens	Mult Tricks – Basic	Elem	done	§4.1.3
+111	Binomial Approximation	Mult Tricks – 2018	HS	new	§4.1.4
+112	Multiplying by Fraction Close to 1	Mult Tricks – 2018	HS	new	§4.1.5
+113	n² + n = (n+1)² − (n+1) Identity	Mult Tricks – 2018	Mid	new	§4.1.6
+114	Conversions Part 2 (rods, furlongs…)	Conversions	Mid	new	§4.2.1
+115	Exotic Number Definitions	Memorization	HS	new	§4.2.2
+116	Square Root of Small Integers (memorized)	Memorization	Mid	new	§4.2.3
+117	Approximations Using Phi (φ)	Memorization	HS	new	§4.2.4
+118	Standard Fibonacci Numbers (memorized)	Memorization	Mid	new	§4.2.5
+119	Fibonacci – Sum of Consecutive Terms (M1)	Fibonacci Properties	HS	new	§4.3.1
+120	Fibonacci – Sum of Consecutive Terms (M2)	Fibonacci Properties	HS	new	§4.3.2
+121	Fibonacci – Sum of Odd/Even Terms	Fibonacci Properties	HS	new	§4.3.3
+122	Fibonacci – Sum of Squares of Terms	Fibonacci Properties	HS	new	§4.3.4
+123	a/b − (na−1)/(nb−1) Variant	Add/Sub Tricks	HS	new	§4.4.1
+124	Special Algebraic Factorizations	Advanced Algebra	HS	new	§4.4.2
+125	Sum of Reciprocals of Triangular Numbers	Series & Sequences	HS	new	§4.4.3
+126	Geometric & Harmonic Means	Algebra	HS	new	§4.4.4
+127	Distance: Point to Line	Geometry	HS	new	§4.4.5
+128	Distance: Between Parallel Lines	Geometry	HS	new	§4.4.6
+129	More on Sets (advanced set ops)	Sets & Probability	HS	new	§4.5.1
+130	Repeating Decimals in Reverse	Repeating Decimals	HS	new	§4.5.2
+131	Repeating Decimals in Other Bases → Base 10	Repeating Decimals	HS	new	§4.5.3
+132	Repeating Decimals in Other Bases (same base)	Repeating Decimals	HS	new	§4.5.4
+133	Remainders with a/p, b/p, ab/p	Division Tricks	HS	new	§4.5.5
+134	Min/Max Value of Expressions	Algebra	HS	new	§4.5.6
+135	Fractions – Add & Subtract	Fractions	Elem	new	test
+136	Fractions – Multiply & Divide	Fractions	Elem	new	test
+137	Mixed Number Arithmetic	Fractions	Elem	new	test
+138	Percent of a Number	Percent & Ratio	Elem	new	test
+139	Sales Tax & Tip	Percent & Ratio	Elem	new	test
+140	Percent Increase/Decrease	Percent & Ratio	Elem	new	test
+141	Ratio & Proportion	Percent & Ratio	Elem	new	test
+142	Fractions ↔ Decimals ↔ Percents	Fractions	Elem	new	test
+143	Prime Numbers & Primality	Number Theory	Elem	new	test
+144	Area of Triangle	Geometry	Elem	new	test
+145	Area of Trapezoid	Geometry	Elem	new	test
+146	Area of Circle / Circumference	Geometry	Elem	new	test
+147	Perimeter of Polygons	Geometry	Elem	new	test
+148	Rectangle Area from Ratio & Perimeter	Geometry	Elem	new	test
+149	Special Right Triangles (30-60-90, 45-45-90)	Geometry	Mid	new	test
+150	Linear Equations – Solve for x	Algebra	Elem	new	test
+151	Systems of Equations (2 vars)	Algebra	Mid	new	test
+152	Slope & Equation of a Line	Algebra	Mid	new	test
+153	Function Notation & Evaluation	Algebra	Mid	new	test
+154	Domain & Range	Algebra	HS	new	test
+155	Quadratic – Vertex & Min/Max	Algebra	HS	new	test
+156	Polynomial Evaluation	Algebra	HS	new	test
+157	Matrices – Multiply 2×2	Advanced Algebra	HS	new	test
+158	Tangent Line to Curve	Calculus	HS	new	test
+159	Square Roots – Perfect	Radicals	Elem	new	test
+160	Cube Roots – Perfect	Radicals	Elem	new	test
+161	Set Cardinality & Counting Subsets	Sets & Probability	Mid	new	test
+162	Squaring General (2-digit)	Mult Tricks – Basic	Elem	done	test
+163	Word Problems – Cost & Price	Word Problems	Elem	new	test
+164	Word Problems – Number Writing	Word Problems	Elem	new	test

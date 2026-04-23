@@ -1265,3 +1265,8 @@ body::after {
   .mode-grid { grid-template-columns: 1fr; }
 }
 
+/* Explanation Steps */
+.example-step {
+  color: #3b82f6;
+}
+

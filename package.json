@@ -22,5 +22,8 @@
   "homepage": "https://github.com/Prqtection2/uil-numbersense#readme",
   "devDependencies": {
     "vite": "^8.0.9"
+  },
+  "dependencies": {
+    "katex": "^0.16.45"
   }
 }

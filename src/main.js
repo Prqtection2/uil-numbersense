@@ -4,6 +4,8 @@
  */
 import { TOPICS, CATEGORIES, LEVELS, getTopicsByLevel, getTopicsByCategory, getTopicById } from './data/topics.js';
 import { progressStore } from './data/progress.js';
+import 'katex/dist/katex.min.css';
+import renderMathInElement from 'katex/dist/contrib/auto-render.mjs';
 
 // ── State ─────────────────────────────────────────────────────────
 let view = 'dashboard';
@@ -35,6 +37,14 @@ function render() {
       </div>
     </div>`;
   bind();
+  renderMathInElement(document.getElementById('app'), {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '\\[', right: '\\]', display: true},
+      {left: '\\(', right: '\\)', display: false}
+    ],
+    throwOnError: false
+  });
 }
 
 progressStore.subscribe(() => render());
