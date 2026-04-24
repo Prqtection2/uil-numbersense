@@ -52,6 +52,20 @@ export const CATEGORIES = {
     color: '#a78bfa',
     description: 'Essential squares, cubes, powers, and constants to memorize.',
   },
+  conversions: {
+    id: 'conversions',
+    title: 'Conversions',
+    icon: '📏',
+    color: '#f87171',
+    description: 'Master fast unit conversions for distance, area, and volume.',
+  },
+  series: {
+    id: 'series',
+    title: 'Series & Sequences',
+    icon: '📈',
+    color: '#60a5fa',
+    description: 'Calculate sums of arithmetic and geometric progressions.',
+  },
   // Future categories will be added here as we build them
 };
 
@@ -874,8 +888,10 @@ A/S → Add and Subtract (left to right)</div>
     practiceGenerator(level) {
       const diff = LEVEL_ORD[level] || 0;
       let n;
-      if (diff === 0) n = pick([15, 25, 35, 45, 55, 65, 75, 85, 95]);
-      else n = pick([105, 115, 125, 155, 195, 205]);
+      // Elementary: 2-digit numbers ending in 5 (15 to 95)
+      if (diff === 0) n = randInt(1, 9) * 10 + 5;
+      // Middle/High: 3-digit numbers ending in 5 (105 to 305)
+      else n = randInt(10, 30) * 10 + 5;
       return { question: `${n}²`, answer: n * n };
     },
   },
@@ -1115,7 +1131,8 @@ A/S → Add and Subtract (left to right)</div>
     ],
     practiceGenerator(level) {
       let n;
-      if (LEVEL_ORD[level] === 0) n = pick([21, 22, 31, 32, 41, 12, 13, 14]); // Keep it manageable
+      // Elementary: Two-digit squaring (11-49), so it's not too giant
+      if (LEVEL_ORD[level] === 0) n = randInt(11, 49);
       else n = randInt(11, 99);
       // exclude ending in 5 logic since that's a previous module
       while (n % 10 === 5) n++; 
@@ -1208,7 +1225,8 @@ A/S → Add and Subtract (left to right)</div>
       { problem: '\\( 15^2 + 16^2 \\)', steps: ['\\( 2(15^2) = 2(225) = 450 \\)', '\\( 2(15) + 1 = 30 + 1 = 31 \\)', '\\( 450 + 31 = 481 \\)'], answer: '481' },
     ],
     practiceGenerator(level) {
-      const n = pick([15, 25, 35, 45, 10, 20, 30, 40]);
+      // Numbers ending in 5 or 0 between 10 and 45
+      const n = randInt(2, 9) * 5;
       return { question: `${n}² + ${n+1}²`, answer: (n * n) + ((n + 1) * (n + 1)) };
     },
   },
@@ -1826,6 +1844,275 @@ A/S → Add and Subtract (left to right)</div>
         { q: 'Larger Amicable pair number', a: '284' },
       ]);
       return { question: q.q, answer: q.a };
+    },
+  },
+  {
+    id: 'roman-numerals',
+    title: 'Roman Numerals',
+    section: 'E.6',
+    category: 'memorization',
+    level: 'elementary',
+    icon: '🏛️',
+    description: 'Quickly convert Roman Numerals to Arabic numerals.',
+    lesson: `
+      <p>Memorize the 7 core Roman Numerals:</p>
+      <ul>
+        <li><strong>I</strong> = 1, <strong>V</strong> = 5, <strong>X</strong> = 10</li>
+        <li><strong>L</strong> = 50, <strong>C</strong> = 100</li>
+        <li><strong>D</strong> = 500, <strong>M</strong> = 1000</li>
+      </ul>
+      <p>Rule: If a smaller numeral appears BEFORE a larger one, you subtract it (e.g., IV = 4, IX = 9, XC = 90). Otherwise, add them up from left to right!</p>
+    `,
+    examples: [
+      { problem: 'MCMXCV', steps: ['M = 1000', 'CM = 900 (100 before 1000)', 'XC = 90 (10 before 100)', 'V = 5', 'Add them up: 1995'], answer: '1995' }
+    ],
+    practiceGenerator(level) {
+      const q = pick([
+        { q: 'C (Roman) = ?', a: '100' },
+        { q: 'D (Roman) = ?', a: '500' },
+        { q: 'M (Roman) = ?', a: '1000' },
+        { q: 'L (Roman) = ?', a: '50' },
+        { q: 'CM (Roman) = ?', a: '900' },
+        { q: 'XC (Roman) = ?', a: '90' },
+        { q: 'XVI (Roman) = ?', a: '16' },
+      ]);
+      return { question: q.q, answer: q.a };
+    },
+  },
+  {
+    id: 'platonic-solids',
+    title: 'Platonic Solids & Euler',
+    section: 'E.7',
+    category: 'memorization',
+    level: 'middle',
+    icon: '🎲',
+    description: 'Memorize faces of platonic solids and Euler\'s polyhedral formula.',
+    lesson: `
+      <p>There are exactly 5 Platonic Solids (regular polyhedrons). You must memorize how many faces they have:</p>
+      <ul>
+        <li><strong>Tetrahedron:</strong> 4 faces</li>
+        <li><strong>Hexahedron (Cube):</strong> 6 faces</li>
+        <li><strong>Octahedron:</strong> 8 faces</li>
+        <li><strong>Dodecahedron:</strong> 12 faces</li>
+        <li><strong>Icosahedron:</strong> 20 faces</li>
+      </ul>
+      <p><strong>Euler's Formula:</strong> For any convex polyhedron, \\( \\text{Vertices} - \\text{Edges} + \\text{Faces} = 2 \\).</p>
+    `,
+    examples: [
+      { problem: 'Faces of an icosahedron?', steps: ['Recall memorized list: Icosahedron is 20.'], answer: '20' },
+      { problem: 'A shape has 8 faces and 12 edges, how many vertices?', steps: ['Use Euler\'s Formula: \\( V - E + F = 2 \\)', '\\( V - 12 + 8 = 2 \\)', '\\( V - 4 = 2 \\)', '\\( V = 6 \\)'], answer: '6' }
+    ],
+    practiceGenerator(level) {
+      const q = pick([
+        { q: 'Faces of a Dodecahedron', a: '12' },
+        { q: 'Faces of an Icosahedron', a: '20' },
+        { q: 'Faces of an Octahedron', a: '8' },
+        { q: 'Edges of a Cube', a: '12' },
+        { q: 'V - E + F = ?', a: '2' },
+      ]);
+      return { question: q.q, answer: q.a };
+    },
+  },
+  {
+    id: 'pi-and-e',
+    title: 'π and e Approximations',
+    section: 'E.8',
+    category: 'memorization',
+    level: 'high',
+    icon: '🥧',
+    description: 'Memorize the rational and decimal approximations of pi and e.',
+    lesson: `
+      <p>Mathematical constants are heavily tested in estimation and accuracy rounds.</p>
+      <ul>
+        <li><strong>Pi (\\( \\pi \\)):</strong> \\( \\approx 3.14159 \\)</li>
+        <li><strong>Euler's Number (e):</strong> \\( \\approx 2.718 \\)</li>
+        <li><strong>Pi Rational Approximations:</strong> \\( \\frac{22}{7} \\) (Close), \\( \\frac{355}{113} \\) (Extremely close!)</li>
+      </ul>
+    `,
+    examples: [
+      { problem: 'Which fraction famously approximates Pi better than 22/7?', steps: ['Recall the memorized ratio: 355/113'], answer: '355/113' }
+    ],
+    practiceGenerator(level) {
+      const q = pick([
+        { q: 'Fraction approx of π (starts with 35..)', a: '355/113' },
+        { q: 'First 3 digits of e', a: '2.71' },
+      ]);
+      return { question: q.q, answer: q.a };
+    },
+  },
+  {
+    id: 'distance-velocity',
+    title: 'Distance & Velocity',
+    section: 'F.1',
+    category: 'conversions',
+    level: 'middle',
+    icon: '🛣️',
+    description: 'Convert miles, feet, and convert MPH to FPS.',
+    lesson: `
+      <p>Memorize these foundational imperial distance conversions:</p>
+      <ul>
+        <li><strong>1 Mile</strong> = 5,280 feet = 1,760 yards</li>
+        <li><strong>1 Yard</strong> = 3 feet = 36 inches</li>
+      </ul>
+      <p>To convert from <strong>Miles Per Hour (MPH)</strong> to <strong>Feet Per Second (fps)</strong> directly, just multiply the speed by <strong>22/15</strong>! <br>For fps to MPH, multiply by <strong>15/22</strong>.</p>
+    `,
+    examples: [
+      { problem: '60 mph in feet per second?', steps: ['Multiply 60 by \\( \\frac{22}{15} \\)', '\\( \\frac{60}{15} = 4 \\)', '\\( 4 \\times 22 = 88 \\)'], answer: '88' }
+    ],
+    practiceGenerator(level) {
+      const mph = pick([15, 30, 45, 60, 75, 90]);
+      return { question: `${mph} mph = ? fps`, answer: mph * 22 / 15 };
+    },
+  },
+  {
+    id: 'area-volume-conversions',
+    title: 'Area & Volume Scalings',
+    section: 'F.2',
+    category: 'conversions',
+    level: 'elementary',
+    icon: '📦',
+    description: 'Learn how unit scalings expand exponentially in 2D and 3D space.',
+    lesson: `
+      <p>When you convert a unit (like yards to feet) in 2D (Area) or 3D (Volume), the conversion factor gets squared or cubed!</p>
+      <ul>
+        <li><strong>1 Yard</strong> = 3 Feet</li>
+        <li><strong>1 Square Yard</strong> = \\( 3^2 \\) = 9 Square Feet</li>
+        <li><strong>1 Cubic Yard</strong> = \\( 3^3 \\) = 27 Cubic Feet</li>
+      </ul>
+      <p>Square inch to square feet? Since there are 12 inches in a foot, there are \\( 12^2 = 144 \\) sq inches in a sq foot! For cubic, it's \\( 12^3 = 1728 \\)!</p>
+    `,
+    examples: [
+      { problem: '5 cubic yards = ? cubic feet', steps: ['Recall 1 cubic yard = 27 cubic feet.', 'Multiply: \\( 5 \\times 27 \\)', '\\( 135 \\)'], answer: '135' }
+    ],
+    practiceGenerator(level) {
+      const q = pick([
+        { q: '1 sq yd = ? sq ft', a: '9' },
+        { q: '1 cu yd = ? cu ft', a: '27' },
+        { q: '1 sq ft = ? sq inches', a: '144' },
+        { q: '1 cu ft = ? cu inches', a: '1728' },
+      ]);
+      return { question: q.q, answer: q.a };
+    },
+  },
+  {
+    id: 'fluid-weight-conversions',
+    title: 'Fluid & Weight',
+    section: 'F.3',
+    category: 'conversions',
+    level: 'elementary',
+    icon: '💧',
+    description: 'Master standard fluid capacities, ounces, and pounds.',
+    lesson: `
+      <p>Memorize the "Gallon Man" or these simple equations for fluids:</p>
+      <ul>
+        <li><strong>1 Gallon</strong> = 4 Quarts = 8 Pints = 16 Cups = 128 fluid ounces</li>
+      </ul>
+      <p>For weight mass:</p>
+      <ul>
+        <li><strong>1 Pound (lb)</strong> = 16 dry ounces</li>
+        <li><strong>1 Ton</strong> = 2,000 pounds</li>
+      </ul>
+    `,
+    examples: [
+      { problem: '3 gallons = ? cups', steps: ['Recall 1 gallon = 16 cups.', 'Multiply: \\( 3 \\times 16 = 48 \\)'], answer: '48' }
+    ],
+    practiceGenerator(level) {
+      const q = pick([
+        { q: '1 gallon = ? cups', a: '16' },
+        { q: '1 gallon = ? pints', a: '8' },
+        { q: '1 quart = ? cups', a: '4' },
+        { q: '1 pound = ? ounces', a: '16' },
+        { q: '1 ton = ? pounds', a: '2000' },
+      ]);
+      return { question: q.q, answer: q.a };
+    },
+  },
+  {
+    id: 'celsius-fahrenheit',
+    title: 'Celsius ↔ Fahrenheit',
+    section: 'F.4',
+    category: 'conversions',
+    level: 'middle',
+    icon: '🌡️',
+    description: 'Convert temperatures instantly in your head.',
+    lesson: `
+      <p>Temperature conversions require two steps: multiplying by a fraction and adding/subtracting 32.</p>
+      <ul>
+        <li><strong>Celsius to Fahrenheit:</strong> Multiply by <strong>1.8</strong> (or \\( \\frac{9}{5} \\)), then <strong>add 32</strong>.</li>
+        <li><strong>Fahrenheit to Celsius:</strong> <strong>Subtract 32</strong> first, then divide by <strong>1.8</strong> (multiply by \\( \\frac{5}{9} \\)).</li>
+      </ul>
+      <p>Hint: Remember that 0°C = 32°F and 100°C = 212°F.</p>
+    `,
+    examples: [
+      { problem: '20°C in Fahrenheit?', steps: ['Multiply by 1.8: \\( 20 \\times 1.8 = 36 \\)', 'Add 32: \\( 36 + 32 = 68 \\)'], answer: '68' }
+    ],
+    practiceGenerator(level) {
+      const c = pick([10, 20, 25, 30, 40, 50, 100]);
+      return { question: `${c}°C = ? °F`, answer: c * 9 / 5 + 32 };
+    },
+  },
+  {
+    id: 'arithmetic-series',
+    title: 'Arithmetic Series Sum',
+    section: 'G.1',
+    category: 'series',
+    level: 'elementary',
+    icon: '🪜',
+    description: 'Find the total sum of any evenly-spaced sequence of numbers.',
+    lesson: `
+      <p>To find the sum of an arithmetic sequence (where the gap between numbers is constant), use the formula:</p>
+      \\[ S = n \\times \\left( \\frac{a_1 + a_n}{2} \\right) \\]
+      <p>Where \\( n \\) is the number of terms, \\( a_1 \\) is the first term, and \\( a_n \\) is the last term.</p>
+      <p>Think of it as simply: <strong>(Number of Things) × (Average of the First and Last Thing)</strong>.</p>
+    `,
+    examples: [
+      { problem: '\\( 1 + 2 + 3 + \\dots + 10 \\)', steps: ['Number of terms \\( n = 10 \\)', 'Average of boundaries: \\( \\frac{1 + 10}{2} = 5.5 \\)', 'Multiply: \\( 10 \\times 5.5 = 55 \\)'], answer: '55' }
+    ],
+    practiceGenerator(level) {
+      const n = randInt(5, 10) * 2;
+      return { question: `1 + 2 + ... + ${n}`, answer: (n * (n + 1)) / 2 };
+    },
+  },
+  {
+    id: 'geometric-series',
+    title: 'Finite Geometric Series',
+    section: 'G.2',
+    category: 'series',
+    level: 'middle',
+    icon: '📈',
+    description: 'Find the total sum of a sequence that multiplies by a common ratio.',
+    lesson: `
+      <p>A finite geometric series multiplies by a common ratio \\( r \\) between each term. The sum is:</p>
+      \\[ S_n = a_1 \\left( \\frac{r^n - 1}{r - 1} \\right) \\]
+      <p>For example, if you are summing powers of 2 (\\( 1 + 2 + 4 + 8 + 16 \\)), notice that the sum is always exactly <strong>1 less than the NEXT term</strong> in the sequence!</p>
+    `,
+    examples: [
+      { problem: '\\( 1 + 2 + 4 + 8 + 16 \\)', steps: ['Identify as powers of 2 (ratio \\( r=2 \\)).', 'The next term would be 32.', 'Answer is \\( 32 - 1 = 31 \\)'], answer: '31' }
+    ],
+    practiceGenerator(level) {
+      const p = randInt(4, 7);
+      return { question: `1 + 2 + 4 + ... + 2^${p}`, answer: 2**(p+1) - 1 };
+    },
+  },
+  {
+    id: 'infinite-geometric',
+    title: 'Infinite Geometric',
+    section: 'G.3',
+    category: 'series',
+    level: 'high',
+    icon: '♾️',
+    description: 'Sum an infinitely long sequence whose numbers approach zero.',
+    lesson: `
+      <p>When a geometric series goes on forever (infinite) AND the ratio \\( r \\) is a fraction between -1 and 1, the sum converges perfectly to a single number:</p>
+      \\[ S = \\frac{a_1}{1 - r} \\]
+      <p>Just take the very first term, and divide it by \\( 1 \\text{ minus the ratio} \\).</p>
+    `,
+    examples: [
+      { problem: '\\( 8 + 4 + 2 + 1 + \\frac{1}{2} + \\dots \\)', steps: ['Identify first term \\( a_1 = 8 \\).', 'Identify ratio \\( r = \\frac{1}{2} \\).', 'Evaluate: \\( \\frac{8}{1 - 0.5} = \\frac{8}{0.5} = 16 \\)'], answer: '16' }
+    ],
+    practiceGenerator(level) {
+      const a = pick([4, 8, 16, 24, 32]);
+      return { question: `${a} + ${a/2} + ${a/4} + ... ∞`, answer: a * 2 };
     },
   },
 ]

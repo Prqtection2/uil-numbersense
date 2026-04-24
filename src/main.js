@@ -373,6 +373,16 @@ function practicePage() {
             </button>
           </div>
         </div>
+        
+        <div class="config-group" style="margin-top:20px;">
+          <span class="config-label"># Questions</span>
+          <div class="mode-grid">
+            <button class="count-btn active" data-count="10">10 <span>(Medals)</span></button>
+            <button class="count-btn" data-count="25">25</button>
+            <button class="count-btn" data-count="50">50</button>
+            <button class="count-btn" data-count="999">Endless</button>
+          </div>
+        </div>
 
         <div class="custom-time-row" id="customTimeRow" style="display:none">
           <span class="config-label">Seconds per question</span>
@@ -468,9 +478,9 @@ function resultsPage() {
           </div>
         </div>
       ` : `
-        <h3>${acc >= 80 ? 'Great Job!' : acc >= 60 ? 'Good Effort!' : acc >= 40 ? 'Keep Practicing!' : 'Don\'t Give Up!'}</h3>
+        <h3>Session Complete! — ${acc >= 80 ? 'Great Job!' : acc >= 60 ? 'Good Effort!' : acc >= 40 ? 'Keep Practicing!' : 'Don\'t Give Up!'}</h3>
       `}
-      <p class="sub">${t ? t.title : 'Practice'} — ${modeLabel} — ${questions.length} Questions</p>
+      <p class="sub">${t ? t.title : 'Practice'} — ${modeLabel} — ${questions.length > 100 ? (session.idx+1) : questions.length} Questions</p>
 
       <div class="results-grid">
         <div class="result-box"><div class="rval green">${correct}</div><div class="rlbl">Correct (+${correct*5})</div></div>
@@ -542,6 +552,13 @@ function bind() {
       el.classList.add('active');
       const row = document.getElementById('customTimeRow');
       if (row) row.style.display = el.dataset.mode === 'custom' ? 'block' : 'none';
+    }));
+
+  // Count buttons
+  document.querySelectorAll('.count-btn').forEach(el =>
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
     }));
 
   // Start
@@ -619,9 +636,21 @@ function startSession() {
     customTime = tpq;
   }
 
-  const count = 10; // always 10 for medal eligibility
+  const countBtn = document.querySelector('.count-btn.active');
+  const count = parseInt(countBtn?.dataset.count) || 10;
+
   const questions = [];
-  for (let i = 0; i < count; i++) questions.push(t.practiceGenerator(lv));
+  const seen = new Set();
+  for (let i = 0; i < count; i++) {
+    let q = t.practiceGenerator(lv);
+    let attempts = 0;
+    while (seen.has(q.question) && attempts < 25) {
+      q = t.practiceGenerator(lv);
+      attempts++;
+    }
+    seen.add(q.question);
+    questions.push(q);
+  }
 
   session = { topicId, questions, idx: 0, answers: new Array(count).fill(null), mode, tpq, timer: tpq, interval: null, streak: 0, newMedal: null };
   view = 'session';
@@ -655,6 +684,7 @@ function nextQuestion() {
 
 function finishSession() {
   clearTimer();
+  view = 'results';
   const correct = session.answers.filter(a => a?.correct).length;
   const oldMedal = progressStore.getMedal(session.topicId);
 
@@ -663,7 +693,6 @@ function finishSession() {
   const newMedal = progressStore.getMedal(session.topicId);
   session.newMedal = (newMedal !== oldMedal) ? newMedal : null;
 
-  view = 'results';
   render();
 }
 
