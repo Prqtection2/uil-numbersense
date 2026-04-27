@@ -1,0 +1,96 @@
+import { Module, UserStats } from './types';
+
+export const USER_STATS: UserStats = {
+  modulesMastered: 42,
+  totalModules: 160,
+  avgSpeed: '4.2s',
+  speedDelta: 'Down 0.4s from last week',
+  globalRank: 'Top 12%',
+  totalStudents: '#1,245 of 10.3k students',
+  streak: 14,
+};
+
+export const MODULES: Module[] = [
+  {
+    id: 'm1',
+    title: 'Multiplying by 11',
+    description: 'Mental shortcut for two and three-digit multipliers.',
+    category: 'Arithmetic',
+    mastery: 88,
+    avgSpeed: '3.8s Avg',
+    status: 'mastered',
+    iconText: '×11',
+  },
+  {
+    id: 'm2',
+    title: 'Squaring (Ends in 5)',
+    description: 'Quick method for numbers like 25, 45, 105.',
+    category: 'Squaring',
+    mastery: 75,
+    status: 'in-progress',
+    iconText: 'n²',
+    essential: true,
+  },
+  {
+    id: 'm3',
+    title: 'Dividing by 25',
+    description: 'Convert division into easy multiplication.',
+    category: 'Arithmetic',
+    status: 'locked',
+    level: 5,
+    iconText: '÷25',
+  },
+  {
+    id: 'm4',
+    title: 'Estimation Theory',
+    description: 'Rounding techniques for competitive testing.',
+    category: 'Foundations',
+    mastery: 100,
+    status: 'mastered',
+    iconText: '≈',
+  },
+  {
+    id: 'm5',
+    title: 'Cross Multiplication',
+    description: 'The "Butterfly" method for complex pairs.',
+    category: 'Arithmetic',
+    mastery: 25,
+    status: 'in-progress',
+    iconText: '⨉',
+  },
+  {
+    id: 'm6',
+    title: 'Base Multiplication',
+    description: 'Calculate products using 10, 50, 100 as bases.',
+    category: 'Advanced',
+    status: 'locked',
+    iconText: 'B',
+  },
+  {
+    id: 'm7',
+    title: 'Fraction Speed Adding',
+    description: 'Bypassing least common denominators.',
+    category: 'Fractions',
+    avgSpeed: '4.5s Avg',
+    status: 'mastered',
+    iconText: '½',
+  },
+  {
+    id: 'm8',
+    title: 'Cubing Small Numbers',
+    description: 'Expanding your mental range to cubic power.',
+    category: 'Advanced',
+    status: 'locked',
+    iconText: 'n³',
+  },
+];
+
+export const PERFORMANCE_DATA = [
+  { day: 'MON', speed: 40, accuracy: 80 },
+  { day: 'TUE', speed: 55, accuracy: 85 },
+  { day: 'WED', speed: 45, accuracy: 75 },
+  { day: 'THU', speed: 70, accuracy: 90 },
+  { day: 'FRI', speed: 65, accuracy: 88 },
+  { day: 'SAT', speed: 85, accuracy: 92 },
+  { day: 'SUN', speed: 95, accuracy: 96 },
+];

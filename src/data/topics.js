@@ -66,6 +66,27 @@ export const CATEGORIES = {
     color: '#60a5fa',
     description: 'Calculate sums of arithmetic and geometric progressions.',
   },
+  'number-theory': {
+    id: 'number-theory',
+    title: 'Number Theory',
+    icon: '🔮',
+    color: '#14b8a6',
+    description: 'Divisors, primes, modular arithmetic, and integer properties.',
+  },
+  geometry: {
+    id: 'geometry',
+    title: 'Geometry',
+    icon: '📐',
+    color: '#eab308',
+    description: 'Polygons, perimeter, area, volume, and properties of shapes.',
+  },
+  patterns: {
+    id: 'patterns',
+    title: 'Number Patterns',
+    icon: '🧩',
+    color: '#ec4899',
+    description: 'Figurate numbers, triangular patterns, and sequences.',
+  },
   // Future categories will be added here as we build them
 };
 
@@ -2113,6 +2134,377 @@ A/S → Add and Subtract (left to right)</div>
     practiceGenerator(level) {
       const a = pick([4, 8, 16, 24, 32]);
       return { question: `${a} + ${a/2} + ${a/4} + ... ∞`, answer: a * 2 };
+    },
+  },
+
+  // ┌──────────────────────────────────────────────────────────────┐
+  // │  61. SUM OF ODD INTEGERS                                    │
+  // └──────────────────────────────────────────────────────────────┘
+  {
+    id: 'sum-odd-integers',
+    title: 'Sum of Odd Integers',
+    section: 'C.1',
+    category: 'series',
+    level: 'elementary',
+    icon: '📊',
+    description: 'Quickly find the sum of consecutive odd integers starting from 1.',
+    lesson: `
+      <p>The sum of the first \\( n \\) odd integers is always perfectly equal to \\( n^2 \\).</p>
+      \\[ 1 + 3 + 5 + \\dots + (2n - 1) = n^2 \\]
+      <p><strong>Example:</strong> \\( 1 + 3 + 5 + 7 + 9 \\).</p>
+      <p>We are adding the first 5 odd integers. The sum is simply \\( 5^2 = 25 \\).</p>
+      <p>If the sequence ends at a specific odd number \\( L \\), you can find \\( n \\) by adding 1 and dividing by 2:</p>
+      \\[ n = \\frac{L + 1}{2} \\]
+      <p>If \\( L = 19 \\), then \\( n = \\frac{20}{2} = 10 \\). The sum is \\( 10^2 = 100 \\).</p>
+    `,
+    examples: [
+      { problem: '\\( 1 + 3 + 5 + \\dots + 15 \\)', steps: ['Find \\( n \\): \\( (15+1) \\div 2 = 8 \\)', 'Square \\( n \\): \\( 8^2 = 64 \\)'], answer: '64' },
+      { problem: '\\( 1 + 3 + 5 + \\dots + 29 \\)', steps: ['Find \\( n \\): \\( (29+1) \\div 2 = 15 \\)', 'Square \\( n \\): \\( 15^2 = 225 \\)'], answer: '225' },
+    ],
+    practiceGenerator(level) {
+      const diff = LEVEL_ORD[level] || 0;
+      let n;
+      if (diff === 0) n = randInt(5, 15);
+      else n = randInt(15, 35);
+      const L = (n * 2) - 1;
+      return { question: `1 + 3 + 5 + ... + ${L}`, answer: n * n };
+    },
+  },
+
+  // ┌──────────────────────────────────────────────────────────────┐
+  // │  62. FIBONACCI-LIKE SEQUENCES                               │
+  // └──────────────────────────────────────────────────────────────┘
+  {
+    id: 'fibonacci-sum',
+    title: 'Fibonacci-Like Sequences',
+    section: 'C.2',
+    category: 'series',
+    level: 'middle',
+    icon: '🐚',
+    description: 'Find the sum of the first 10 terms of any Fibonacci-like sequence.',
+    lesson: `
+      <p>A Fibonacci-like sequence is one where each term is the sum of the two preceding terms. (e.g., \\( 1, 1, 2, 3, 5\\dots \\) or \\( 2, 5, 7, 12, 19\\dots \\)).</p>
+      <p><strong>The Trick:</strong> The sum of the first 10 terms of ANY Fibonacci sequence is exactly \\( 11 \\times \\text{the 7th term} \\).</p>
+      \\[ S_{10} = 11 \\times a_7 \\]
+      <p>If a problem asks for the sum of the first 10 terms, quickly generate the sequence up to the 7th term and multiply by 11 using the standard multiply-by-11 trick.</p>
+    `,
+    examples: [
+      { problem: 'If a sequence starts \\( 2, 4, 6... \\) and follows the Fibonacci rule, sum the first 10 terms.', steps: ['Generate 7 terms: \\( 2, 4, 6, 10, 16, 26, 42 \\)', '7th term is 42', 'Multiply by 11: \\( 42 \\times 11 = 462 \\)'], answer: '462' },
+    ],
+    practiceGenerator(level) {
+      const t1 = randInt(1, 5);
+      const t2 = randInt(1, 5) + t1;
+      let fib = [t1, t2];
+      for (let i = 2; i < 7; i++) fib.push(fib[i-1] + fib[i-2]);
+      const last = fib[6];
+      return { question: `Sum 1st 10 terms of Fib seq: ${t1}, ${t2}, ${fib[2]}...`, answer: last * 11 };
+    },
+  },
+
+  // ┌──────────────────────────────────────────────────────────────┐
+  // │  63. INTEGRAL DIVISORS                                      │
+  // └──────────────────────────────────────────────────────────────┘
+  {
+    id: 'integral-divisors',
+    title: 'Integral Divisors',
+    section: 'C.3',
+    category: 'number-theory',
+    level: 'elementary',
+    icon: '🔮',
+    description: 'Find the total number of positive divisors of an integer.',
+    lesson: `
+      <p>To find how many numbers evenly divide a number \\( N \\):</p>
+      <ol>
+        <li>Find the prime factorization of \\( N \\). Let \\( N = p_{1}^{a} \\times p_{2}^{b} \\times p_{3}^{c} \\dots \\)</li>
+        <li>Add 1 to each of the exponents: \\( a+1, b+1, c+1 \\)</li>
+        <li>Multiply these numbers together. \\( \\text{Divisors} = (a+1)(b+1)(c+1)\\dots \\)</li>
+      </ol>
+      <p><strong>Example: How many divisors does 24 have?</strong></p>
+      \\[ 24 = 8 \\times 3 = 2^3 \\times 3^1 \\]
+      \\[ \\text{Exponents are } 3 \\text{ and } 1. \\]
+      \\[ (3 + 1)(1 + 1) = 4 \\times 2 = 8 \\]
+      <p>24 has 8 divisors (1, 2, 3, 4, 6, 8, 12, 24).</p>
+    `,
+    examples: [
+      { problem: 'How many positive integral divisors does 36 have?', steps: ['Prime factor: \\( 36 = 2^2 \\times 3^2 \\)', 'Exponents: 2 and 2', 'Add 1 and multiply: \\( (2+1)(2+1) = 3 \\times 3 = 9 \\)'], answer: '9' },
+      { problem: 'Number of divisors of 40', steps: ['Factor: \\( 40 = 2^3 \\times 5^1 \\)', 'Add 1 to powers: \\( 4 \\times 2 \\)', '8 divisors'], answer: '8' },
+    ],
+    practiceGenerator(level) {
+      const diff = LEVEL_ORD[level] || 0;
+      let p1 = pick([2, 3, 5]);
+      let p2 = pick([2, 3, 5]);
+      while (p1 === p2) p2 = pick([2, 3, 5]);
+      let e1, e2, e3 = 0, p3 = 1;
+      if (diff === 0) { e1 = randInt(2, 4); e2 = randInt(1, 2); }
+      else { 
+        e1 = randInt(2, 4); e2 = randInt(1, 3); 
+        if (Math.random() > 0.5) { 
+          p3 = pick([2, 3, 5, 7]);
+          while (p3 === p1 || p3 === p2) p3 = pick([2, 3, 5, 7]);
+          e3 = 1;
+        }
+      }
+      const n = Math.pow(p1, e1) * Math.pow(p2, e2) * Math.pow(p3, e3);
+      const ans = (e1 + 1) * (e2 + 1) * (e3 + 1);
+      return { question: `Num divisors of ${n}`, answer: ans };
+    },
+  },
+
+  // ┌──────────────────────────────────────────────────────────────┐
+  // │  64. DIAGONALS OF A POLYGON                                 │
+  // └──────────────────────────────────────────────────────────────┘
+  {
+    id: 'diagonals-polygon',
+    title: 'Diagonals of a Polygon',
+    section: 'C.4',
+    category: 'geometry',
+    level: 'middle',
+    icon: '🕸️',
+    description: 'Calculate the total number of diagonals in an n-sided polygon.',
+    lesson: `
+      <p>A diagonal is a line connecting two non-adjacent vertices of a polygon. To find the total number of diagonals for an \\( n \\)-sided polygon, use the formula:</p>
+      <div class="formula-block">\\( D = \\frac{n(n-3)}{2} \\)</div>
+      <ul>
+        <li>\\( n \\): number of sides/vertices</li>
+        <li>\\( n-3 \\): number of diagonals you can draw from a single vertex (you can't draw a diagonal to yourself, or the 2 adjacent points).</li>
+        <li>Divide by 2 because each diagonal is counted from both ends.</li>
+      </ul>
+      <p><strong>Example: Heptagon (7 sides)</strong></p>
+      \\[ D = \\frac{7 \\times (7-3)}{2} = \\frac{7 \\times 4}{2} = \\frac{28}{2} = 14 \\]
+    `,
+    examples: [
+      { problem: 'How many diagonals does a nonagon have?', steps: ['Nonagon has 9 sides. \\( n=9 \\)', '\\( (9 \\times 6) \\div 2 \\)', '\\( 54 \\div 2 = 27 \\)'], answer: '27' },
+      { problem: 'Diagonals in a 12-sided polygon (dodecagon)', steps: ['\\( (12 \\times 9) \\div 2 \\)', '\\( 108 \\div 2 = 54 \\)'], answer: '54' },
+    ],
+    practiceGenerator(level) {
+      const names = { 5: 'pentagon', 6: 'hexagon', 7: 'heptagon', 8: 'octagon', 9: 'nonagon', 10: 'decagon', 12: 'dodecagon' };
+      const n = randInt(5, 20);
+      const label = names[n] || `${n}-gon`;
+      const txt = Math.random() > 0.5 ? `Diagonals in a ${label}` : `Diagonals of an ${n}-sided polygon`;
+      return { question: txt, answer: n * (n - 3) / 2 };
+    },
+  },
+
+  // ┌──────────────────────────────────────────────────────────────┐
+  // │  65. INTERIOR & EXTERIOR ANGLES                             │
+  // └──────────────────────────────────────────────────────────────┘
+  {
+    id: 'polygon-angles',
+    title: 'Polygonal Angles',
+    section: 'C.5',
+    category: 'geometry',
+    level: 'elementary',
+    icon: '📏',
+    description: 'Calculate interior and exterior angles of regular polygons.',
+    lesson: `
+      <p>For any polygon with \\( n \\) sides:</p>
+      <p><strong>1. Sum of Interior Angles:</strong></p>
+      \\[ (n-2) \\times 180^{\\circ} \\]
+      <p>(Since an \\( n \\)-gon can be split into \\( n-2 \\) triangles).</p>
+      
+      <p><strong>2. Single Interior Angle (Regular):</strong></p>
+      \\[ \\frac{(n-2) \\times 180^{\\circ}}{n} \\]
+      
+      <p><strong>3. Sum of Exterior Angles:</strong></p>
+      \\[ \\text{Always } 360^{\\circ} \\text{ (for any convex polygon!)} \\]
+      
+      <p><strong>4. Single Exterior Angle (Regular):</strong></p>
+      \\[ \\frac{360^{\\circ}}{n} \\]
+      <p><strong>Trick:</strong> The interior and exterior angles of a polygon are supplementary (they add to 180). Often, it's faster to find the exterior angle (\\( 360/n \\)) and subtract from 180 to find the interior angle!</p>
+    `,
+    examples: [
+      { problem: 'Sum of interior angles of an octagon', steps: ['\\( n=8 \\)', '\\( (8-2) \\times 180 \\)', '\\( 6 \\times 180 = 1080^{\\circ} \\)'], answer: '1080' },
+      { problem: 'Interior angle of a regular decagon', steps: ['\\( n=10 \\)', 'Find exterior first: \\( 360 \\div 10 = 36 \\)', 'Interior is \\( 180 - 36 = 144^{\\circ} \\)'], answer: '144' },
+    ],
+    practiceGenerator(level) {
+      const types = ['sum_int', 'single_ext', 'single_int'];
+      const t = pick(types);
+      const names = { 5: 'pentagon', 6: 'hexagon', 8: 'octagon', 9: 'nonagon', 10: 'decagon', 12: 'dodecagon' };
+      const n = pick([5, 6, 8, 9, 10, 12, 15, 18, 20]);
+      const label = names[n] || `${n}-gon`;
+      
+      if (t === 'sum_int') return { question: `Sum of int. angles of ${label} (degrees)`, answer: (n - 2) * 180 };
+      if (t === 'single_ext') return { question: `Ext. angle of reg. ${label} (degrees)`, answer: 360 / n };
+      return { question: `Int. angle of reg. ${label} (degrees)`, answer: 180 - (360 / n) };
+    },
+  },
+
+  // ┌──────────────────────────────────────────────────────────────┐
+  // │  66. TRIANGULAR NUMBERS                                     │
+  // └──────────────────────────────────────────────────────────────┘
+  {
+    id: 'triangular-numbers',
+    title: 'Triangular Numbers',
+    section: 'C.6',
+    category: 'patterns',
+    level: 'elementary',
+    icon: '🔺',
+    description: 'Find the nth triangular number quickly.',
+    lesson: `
+      <p>Triangular numbers are generated by arranging dots in an equilateral triangle. They represent the sum of the first \\( n \\) consecutive integers (\\( 1+2+3+\\dots+n \\)).</p>
+      <p>The sequence goes: \\( 1, 3, 6, 10, 15, 21, 28, 36, 45, 55\\dots \\)</p>
+      <p><strong>The Formula:</strong> To find the \\( n \\)th triangular number \\( T_n \\):</p>
+      <div class="formula-block">\\( T_n = \\frac{n(n+1)}{2} \\)</div>
+      <p><strong>Example: 8th Triangular Number</strong></p>
+      \\[ T_8 = \\frac{8 \\times 9}{2} = \\frac{72}{2} = 36 \\]
+    `,
+    examples: [
+      { problem: 'What is the 10th triangular number?', steps: ['Formula: \\( n(n+1)/2 \\)', '\\( (10 \\times 11)/2 \\)', '\\( 110/2 = 55 \\)'], answer: '55' },
+      { problem: 'Find \\( T_{12} \\)', steps: ['\\( (12 \\times 13)/2 \\)', '\\( 6 \\times 13 = 78 \\)'], answer: '78' },
+    ],
+    practiceGenerator(level) {
+      const n = randInt(5, 25);
+      return { question: `${n}th triangular number`, answer: n * (n + 1) / 2 };
+    },
+  },
+
+  // ┌──────────────────────────────────────────────────────────────┐
+  // │  67. FIGURATE NUMBERS (PENT/HEX)                            │
+  // └──────────────────────────────────────────────────────────────┘
+  {
+    id: 'figurate-numbers',
+    title: 'Figurate Numbers',
+    section: 'C.7',
+    category: 'patterns',
+    level: 'middle',
+    icon: '⬟',
+    description: 'Formulas for Pentagonal and Hexagonal numbers.',
+    lesson: `
+      <p>Just like triangular numbers, we can arrange dots into pentagons and hexagons. The formulas to find the \\( n \\)th figurate number are critical to memorize:</p>
+      <ul>
+        <li><strong>Pentagonal Numbers (\\( P_n \\)):</strong> \\( \\frac{n(3n - 1)}{2} \\)<br/>
+          <em>Sequence: 1, 5, 12, 22, 35...</em>
+        </li>
+        <li><strong>Hexagonal Numbers (\\( H_n \\)):</strong> \\( n(2n - 1) \\)<br/>
+          <em>Sequence: 1, 6, 15, 28, 45...</em>
+        </li>
+      </ul>
+      <p><strong>Note:</strong> Every hexagonal number is also a triangular number!</p>
+    `,
+    examples: [
+      { problem: 'What is the 5th pentagonal number?', steps: ['Using \\( P_5 = 5(3(5)-1)/2 \\)', '\\( \\( 5 \\times 14 \\) / 2 \\)', '\\( 70 / 2 = 35 \\)'], answer: '35' },
+      { problem: 'Find the 8th hexagonal number.', steps: ['Using \\( H_8 = 8(2(8)-1) \\)', '\\( \\( 8 \\times 15 \\) = 120 \\)'], answer: '120' },
+    ],
+    practiceGenerator(level) {
+      const type = pick(['pentagonal', 'hexagonal']);
+      const n = randInt(5, 15);
+      if (type === 'pentagonal') {
+        return { question: `${n}th pentagonal number`, answer: n * (3 * n - 1) / 2 };
+      } else {
+        return { question: `${n}th hexagonal number`, answer: n * (2 * n - 1) };
+      }
+    },
+  },
+
+  // ┌──────────────────────────────────────────────────────────────┐
+  // │  68. PYTHAGOREAN TRIPLES                                    │
+  // └──────────────────────────────────────────────────────────────┘
+  {
+    id: 'pythagorean-triples',
+    title: 'Pythagorean Triples',
+    section: 'C.8',
+    category: 'geometry',
+    level: 'elementary',
+    icon: '📐',
+    description: 'Find missing sides of right triangles instantly.',
+    lesson: `
+      <p>Do not waste time doing \\( a^2 + b^2 = c^2 \\). The vast majority of UIL problems use scaled versions of famous Pythagorean Triples.</p>
+      <p><strong>Memorize these primitives:</strong></p>
+      <ul>
+        <li><strong>3 - 4 - 5</strong> (e.g. 6-8-10, 9-12-15, 30-40-50)</li>
+        <li><strong>5 - 12 - 13</strong>  (e.g. 10-24-26, 15-36-39)</li>
+        <li><strong>8 - 15 - 17</strong></li>
+        <li><strong>7 - 24 - 25</strong></li>
+        <li><strong>9 - 40 - 41</strong></li>
+      </ul>
+      <p>Watch out: The largest number is ALWAYS the hypotenuse.</p>
+    `,
+    examples: [
+      { problem: 'Find hypotenuse of right triangle with legs 10 and 24', steps: ['Notice 10 and 24 are double 5 and 12.', 'This is a \\( 5 \\times 2 \\) - \\( 12 \\times 2 \\) - \\( 13 \\times 2 \\) triangle', 'Hypotenuse: \\( 13 \\times 2 = 26 \\)'], answer: '26' },
+      { problem: 'Legs are 15, x. Hypotenuse is 25.', steps: ['Divide by 5: \\( 3, x/5, 5 \\)', 'Missing piece is 4. (\\( 3-4-5 \\))', '\\( x = 4 \\times 5 = 20 \\)'], answer: '20' },
+    ],
+    practiceGenerator(level) {
+      const prims = [[3,4,5], [5,12,13], [8,15,17], [7,24,25]];
+      const scale = randInt(1, 4);
+      let [a, b, c] = pick(prims);
+      a *= scale; b *= scale; c *= scale;
+      if (Math.random() > 0.5) [a, b] = [b, a];
+      
+      const missing = pick(['hypot', 'leg']);
+      if (missing === 'hypot') return { question: `Right \\( \\Delta \\) legs ${a}, ${b}. Hypotenuse?`, answer: c };
+      return { question: `Right \\( \\Delta \\) leg ${a}, hypotenuse ${c}. Other leg?`, answer: b };
+    },
+  },
+
+  // ┌──────────────────────────────────────────────────────────────┐
+  // │  69. EQUILATERAL TRIANGLE FORMULAS                          │
+  // └──────────────────────────────────────────────────────────────┘
+  {
+    id: 'equilateral-formulas',
+    title: 'Equilateral Triangle',
+    section: 'C.9',
+    category: 'geometry',
+    level: 'middle',
+    icon: '⛰️',
+    description: 'Calculate the height and area of equilateral triangles.',
+    lesson: `
+      <p>For an equilateral triangle with side length \\( s \\), memorize the direct formulas for height (\\( h \\)) and Area (\\( A \\)):</p>
+      <ul>
+        <li><strong>Height:</strong> \\( \\quad h = \\frac{s \\sqrt{3}}{2} \\)</li>
+        <li><strong>Area:</strong> \\( \\quad A = \\frac{s^2 \\sqrt{3}}{4} \\)</li>
+      </ul>
+      <p>Notice how area requires the \\( s \\) to be squared (because area is 2-dimensional!), while height does not.</p>
+      <p><strong>Note:</strong> Typical UIL formats will ask for the <em>coefficient</em> of \\( \\sqrt{3} \\), so your answer is just the number proceeding \\( \\sqrt{3} \\).</p>
+    `,
+    examples: [
+      { problem: 'Area of equilateral triangle with side length 8 = \\( k\\sqrt{3} \\). Find \\( k \\).', steps: ['Area formula is \\( s^2\\sqrt{3}/4 \\)', '\\( 8^2 / 4 = 64 / 4 = 16 \\)', 'The coefficient \\( k \\) is 16'], answer: '16' },
+    ],
+    practiceGenerator(level) {
+      const type = pick(['area', 'height']);
+      const s = randInt(2, 12) * 2; // Always even
+      if (type === 'area') {
+        return { question: `Area of equil. \\( \\Delta \\) side ${s}=\\( k\\sqrt{3} \\). \\( k= \\)?`, answer: (s * s) / 4 };
+      }
+      return { question: `Height of equil. \\( \\Delta \\) side ${s}=\\( k\\sqrt{3} \\). \\( k= \\)?`, answer: s / 2 };
+    },
+  },
+
+  // ┌──────────────────────────────────────────────────────────────┐
+  // │  70. VOLUME OF SOLIDS                                       │
+  // └──────────────────────────────────────────────────────────────┘
+  {
+    id: 'volume-solids',
+    title: 'Volume of Solids',
+    section: 'C.10',
+    category: 'geometry',
+    level: 'middle',
+    icon: '🧊',
+    description: 'Find volumes of spheres, cylinders, and cones in terms of pi.',
+    lesson: `
+      <p>Memorize the formulas for 3D shapes. Most UIL questions ask for the answer "in terms of \\( \\pi \\)".</p>
+      <ul>
+        <li><strong>Cylinder:</strong> \\( V = \\pi r^2 h \\)</li>
+        <li><strong>Cone:</strong> \\( V = \\frac{1}{3} \\pi r^2 h \\) (It's exactly \\( \\frac{1}{3} \\) of a cylinder!)</li>
+        <li><strong>Sphere:</strong> \\( V = \\frac{4}{3} \\pi r^3 \\)</li>
+      </ul>
+    `,
+    examples: [
+      { problem: 'Volume of sphere with radius 6 = \\( k\\pi \\). \\( k= \\)?', steps: ['\\( 4/3 \\times 6^3 \\)', '\\( 4/3 \\times 216 = 288 \\)'], answer: '288' },
+      { problem: 'Volume of cone with radius 4, height 6 = \\( k\\pi \\)', steps: ['\\( 1/3 \\times 4^2 \\times 6 \\)', '\\( 1/3 \\times 16 \\times 6 = 32 \\)'], answer: '32' },
+    ],
+    practiceGenerator(level) {
+      const t = pick(['cylinder', 'cone', 'sphere']);
+      const r = randInt(2, 6);
+      if (t === 'cylinder') {
+        const h = randInt(3, 10);
+        return { question: `Vol of cylinder \\( r= \\){r}, h=${h}\\( is \\)k\\pi\\( . \\)k=\\( ?`, answer: r * r * h };
+      } else if (t === 'cone') {
+        const h = randInt(1, 5) * 3; // multiple of 3
+        return { question: `Vol of cone \\)r=${r}, h=${h}\\( is \\)k\\pi\\( . \\)k=\\( ?`, answer: (r * r * h) / 3 };
+      } else {
+        const sphR = randInt(1, 3) * 3; // 3, 6, 9
+        return { question: `Vol of sphere \\)r=${sphR}\\( is \\)k\\pi\\( . \\)k=$?`, answer: (4 * sphR * sphR * sphR) / 3 };
+      }
     },
   },
 ]

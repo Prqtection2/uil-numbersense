@@ -1,6 +1,6 @@
 /**
- * UIL Number Sense Trainer — Main Application v3
- * Medal-based mastery with keyboard flow
+ * NumberSense Pro — Main Application
+ * UIL Academic Prep • Medal-based mastery with keyboard flow
  */
 import { TOPICS, CATEGORIES, LEVELS, getTopicsByLevel, getTopicsByCategory, getTopicById } from './data/topics.js';
 import { progressStore } from './data/progress.js';
@@ -11,7 +11,8 @@ import renderMathInElement from 'katex/dist/contrib/auto-render.mjs';
 let view = 'dashboard';
 let topicId = null;
 let session = null;
-let customTime = 15; // for custom mode
+let customTime = 15;
+let activeCat = 'all'; // category filter
 
 // ── Medal Helpers ─────────────────────────────────────────────────
 function medalIcon(medal) {
@@ -34,6 +35,7 @@ function render() {
       <div class="main-content">
         ${header()}
         <div class="content-body">${page()}</div>
+        <footer class="app-footer">© 2026 NumberSense Pro • Sanctioned UIL Preparatory Material</footer>
       </div>
     </div>`;
   bind();
@@ -57,11 +59,8 @@ function sidebar() {
   return `
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
-      <div class="sidebar-brand-icon">NS</div>
-      <div class="sidebar-brand-text">
-        <h1>NS Trainer</h1>
-        <span>UIL Number Sense</span>
-      </div>
+      <h1>NumberSense Pro</h1>
+      <p class="brand-sub">UIL Academic Prep</p>
     </div>
 
     <div class="level-selector">
@@ -73,11 +72,12 @@ function sidebar() {
       </div>
     </div>
 
-    <nav class="sidebar-nav">
+    <nav class="sidebar-nav scrollbar-hide">
       <div class="nav-group">
         <div class="nav-group-label">Navigation</div>
-        <div class="nav-item${view==='dashboard'?' active':''}" data-go="dashboard">
-          <span class="nav-label">Dashboard</span>
+        <div class="nav-item nav-dashboard${view==='dashboard'?' active':''}" data-go="dashboard">
+          <span class="nav-dash-icon">⊞</span>
+          <span class="nav-label">Modules Dashboard</span>
         </div>
       </div>
       ${Object.values(CATEGORIES).map(cat => {
@@ -89,7 +89,7 @@ function sidebar() {
           ${ts.map((t, i) => {
             const medal = progressStore.getMedal(t.id);
             return `
-            <div class="nav-item${topicId===t.id&&view!=='dashboard'?' active':''} ${medalClass(medal)}" data-topic="${t.id}">
+            <div class="nav-item${topicId===t.id&&view!=='dashboard'?' active':''}" data-topic="${t.id}">
               <span class="nav-idx">${i + 1}</span>
               <span class="nav-label">${t.title}</span>
               <span class="nav-medal">${medalIcon(medal)}</span>
@@ -100,11 +100,13 @@ function sidebar() {
     </nav>
 
     <div class="sidebar-footer">
-      <div class="sidebar-stat-row"><span class="label">Topics</span><span class="value">${topics.length}</span></div>
-      <div class="sidebar-stat-row"><span class="label">🥇 Gold</span><span class="value">${mc.gold}</span></div>
-      <div class="sidebar-stat-row"><span class="label">🥈 Silver</span><span class="value">${mc.silver}</span></div>
-      <div class="sidebar-stat-row"><span class="label">🥉 Bronze</span><span class="value">${mc.bronze}</span></div>
-      <div class="sidebar-stat-row"><span class="label">Accuracy</span><span class="value">${progressStore.getOverallAccuracy()}%</span></div>
+      <div class="footer-card">
+        <div class="sidebar-stat-row"><span class="label">Topics</span><span class="value">${topics.length}</span></div>
+        <div class="sidebar-stat-row"><span class="label">🥇 Gold</span><span class="value">${mc.gold}</span></div>
+        <div class="sidebar-stat-row"><span class="label">🥈 Silver</span><span class="value">${mc.silver}</span></div>
+        <div class="sidebar-stat-row"><span class="label">🥉 Bronze</span><span class="value">${mc.bronze}</span></div>
+        <div class="sidebar-stat-row"><span class="label">Accuracy</span><span class="value">${progressStore.getOverallAccuracy()}%</span></div>
+      </div>
     </div>
   </aside>`;
 }
@@ -112,13 +114,14 @@ function sidebar() {
 // ── Header ────────────────────────────────────────────────────────
 function header() {
   const lv = LEVELS[progressStore.data.level];
-  let title = 'Dashboard';
+  let title = 'Modules Dashboard';
   if (view === 'learn' || view === 'memorize' || view === 'practice') {
     const t = getTopicById(topicId);
-    title = t ? t.title : 'Topic';
+    title = t ? t.title : 'Technique Guide';
   }
-  if (view === 'session') title = 'Practice Session';
-  if (view === 'results') title = 'Results';
+  if (view === 'session') title = 'Drill Arena';
+  if (view === 'interstitial') title = 'Session Checkpoint';
+  if (view === 'results') title = 'Session Results';
 
   return `
   <header class="content-header">
@@ -126,7 +129,15 @@ function header() {
       <button class="mobile-toggle" id="menuBtn">☰</button>
       <h2>${title}</h2>
     </div>
-    <div class="header-level-tag">${lv.full}</div>
+    <div class="header-right">
+      <div class="header-level-tag">${lv.full}</div>
+      <button class="header-icon-btn" id="settingsBtn" title="Settings">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+      <button class="header-icon-btn" id="accountBtn" title="Account">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </button>
+    </div>
   </header>`;
 }
 
@@ -138,6 +149,7 @@ function page() {
     case 'memorize':  return memorizePage();
     case 'practice':  return practicePage();
     case 'session':   return sessionPage();
+    case 'interstitial': return interstitialPage();
     case 'results':   return resultsPage();
     default:          return dashboardPage();
   }
@@ -148,55 +160,85 @@ function dashboardPage() {
   const lv = progressStore.data.level;
   const topics = getTopicsByLevel(lv);
   const mc = progressStore.getMedalCounts();
+  const mastered = mc.gold + mc.silver + mc.bronze;
+  const masteryPct = topics.length ? Math.round((mastered / topics.length) * 100) : 0;
+
+  // Build unique category list for filter
+  const catIds = ['all', ...new Set(topics.map(t => t.category))];
+
+  // Filter topics
+  const displayTopics = activeCat === 'all' ? topics : topics.filter(t => t.category === activeCat);
 
   return `
-  <div class="overview-bar">
-    <div class="overview-left">
-      <h2>Number Sense Trainer</h2>
-      <p>Master mental math for UIL competition.</p>
+  <!-- Stats Overview -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-label">Modules Mastered</span>
+      <div style="display:flex;align-items:flex-end;justify-content:space-between">
+        <span class="stat-value">${mastered}</span>
+        <span class="stat-sub">/ ${topics.length}</span>
+      </div>
+      <div class="stat-progress"><div class="stat-progress-fill" style="width:${masteryPct}%"></div></div>
     </div>
-    <div class="overview-stats">
-      <div class="ov-stat"><span class="ov-num">${topics.length}</span><span class="ov-lbl">Topics</span></div>
-      <div class="ov-stat"><span class="ov-num">${mc.gold}</span><span class="ov-lbl">Gold</span></div>
-      <div class="ov-stat"><span class="ov-num">${progressStore.data.totalPracticed}</span><span class="ov-lbl">Solved</span></div>
-      <div class="ov-stat"><span class="ov-num">${progressStore.getOverallAccuracy()}%</span><span class="ov-lbl">Accuracy</span></div>
+
+    <div class="stat-card">
+      <span class="stat-label">Gold Medals</span>
+      <div style="display:flex;align-items:center;gap:0.5rem">
+        <span style="font-size:1.4rem">🥇</span>
+        <span class="stat-value" style="font-size:2rem">${mc.gold}</span>
+      </div>
+      <span class="stat-sub">${mc.silver} Silver • ${mc.bronze} Bronze</span>
+    </div>
+
+    <div class="stat-card">
+      <span class="stat-label">Problems Solved</span>
+      <span class="stat-value" style="font-size:2rem">${progressStore.data.totalPracticed}</span>
+      <span class="stat-sub">Overall accuracy: ${progressStore.getOverallAccuracy()}%</span>
+    </div>
+
+    <div class="stat-card accent-card">
+      <span class="stat-label">Accuracy Rate</span>
+      <div style="display:flex;align-items:center;gap:0.5rem">
+        <span style="font-size:1.4rem">⚡</span>
+        <span class="stat-value" style="font-size:2rem">${progressStore.getOverallAccuracy()}%</span>
+      </div>
+      <span class="stat-sub">Keep it above 90% for Gold!</span>
     </div>
   </div>
 
-  ${Object.values(CATEGORIES).map(cat => {
-    const ts = getTopicsByCategory(cat.id, lv);
-    if (!ts.length) return '';
-    return `
-    <div class="cat-header">
-      <h3>${cat.title}</h3>
-      <span class="cat-count">${ts.length}</span>
-    </div>
-    <div class="topic-list">
-      ${ts.map((t, i) => {
-        const medal = progressStore.getMedal(t.id);
-        const stats = progressStore.getStats(t.id);
-        const statusText = medal
-          ? (medal === 'gold' ? 'Gold' : medal === 'silver' ? 'Silver' : 'Bronze')
-          : (stats.practiceCount > 0 ? `${stats.correctCount}/${stats.practiceCount}` : 'Not started');
-        const statusCls = medal
-          ? `status-${medal}`
-          : (stats.practiceCount > 0 ? 'status-started' : 'status-new');
-        return `
-        <div class="topic-row ${medalClass(medal)}" data-topic="${t.id}">
-          <span class="topic-num">${i + 1}</span>
-          <div class="topic-info">
-            <span class="topic-name">${t.title}</span>
-            <span class="topic-desc">${t.description}</span>
-          </div>
-          <div class="topic-meta">
-            <span class="topic-medal-icon">${medalIcon(medal)}</span>
-            <span class="topic-status ${statusCls}">${statusText}</span>
-          </div>
-          <span class="topic-arrow">›</span>
-        </div>`;
+  <!-- Category Filter + Module Grid -->
+  <div class="cat-filter-bar">
+    <h2>Module Library</h2>
+    <div class="cat-pills scrollbar-hide">
+      ${catIds.map(id => {
+        const label = id === 'all' ? 'All' : (CATEGORIES[id]?.title || id);
+        return `<button class="cat-pill${activeCat===id?' active':''}" data-cat="${id}">${label}</button>`;
       }).join('')}
-    </div>`;
-  }).join('')}`;
+    </div>
+  </div>
+
+  <div class="topic-grid">
+    ${displayTopics.map((t) => {
+      const medal = progressStore.getMedal(t.id);
+      const stats = progressStore.getStats(t.id);
+      const catTitle = CATEGORIES[t.category]?.title || t.category;
+      const statusIcon = medal === 'gold' ? '🥇' : medal === 'silver' ? '🥈' : medal === 'bronze' ? '🥉'
+        : (stats.practiceCount > 0 ? '📝' : '');
+      return `
+      <div class="topic-card ${medalClass(medal)}" data-topic="${t.id}">
+        <div class="card-top">
+          <div class="card-icon">${t.icon}</div>
+          <div class="card-status">${statusIcon}</div>
+        </div>
+        <div class="card-title">${t.title}</div>
+        <div class="card-desc">${t.description}</div>
+        <div class="card-bottom">
+          <span class="card-cat">${catTitle}</span>
+          <span class="card-medal">${medalIcon(medal)}</span>
+        </div>
+      </div>`;
+    }).join('')}
+  </div>`;
 }
 
 // ── Learn Page ────────────────────────────────────────────────────
@@ -206,9 +248,9 @@ function learnPage() {
   const medal = progressStore.getMedal(t.id);
 
   return `
-  <div class="learn-container">
+  <div>
     <div class="breadcrumbs">
-      <span class="crumb" data-go="dashboard">Dashboard</span>
+      <span class="crumb" data-go="dashboard">Modules</span>
       <span class="crumb-sep">›</span>
       <span class="crumb current">${t.title}</span>
     </div>
@@ -223,23 +265,36 @@ function learnPage() {
       ${medalIcon(medal)} ${medal.charAt(0).toUpperCase() + medal.slice(1)} Medal Achieved
     </div>` : ''}
 
-    <div class="content-card">
-      <h3>Section ${t.section}: ${t.title}</h3>
-      <div class="lesson-text">${t.lesson}</div>
-    </div>
-
-    ${t.examples.length ? `
-    <div class="content-card">
-      <h3>Worked Examples</h3>
-      ${t.examples.map((ex, i) => `
-        <div class="example-block">
-          <div class="example-label">Example ${i + 1}</div>
-          <div class="example-problem">${ex.problem}</div>
-          ${ex.steps.map(s => `<div class="example-step">${s}</div>`).join('')}
-          <div class="example-answer">Answer: ${ex.answer}</div>
+    <div class="two-col">
+      <div>
+        <div class="content-card">
+          <h3>Section ${t.section}: ${t.title}</h3>
+          <div class="lesson-text">${t.lesson}</div>
         </div>
-      `).join('')}
-    </div>` : ''}
+
+        ${t.practiceGenerator ? `
+        <div class="cta-card" data-practice="${t.id}">
+          <h3>Ready to Drill?</h3>
+          <p>Practice randomized problems to lock in the muscle memory.</p>
+          <span class="btn">Start Practice →</span>
+        </div>` : ''}
+      </div>
+
+      <div>
+        ${t.examples.length ? `
+        <div class="content-card">
+          <h3>Worked Examples</h3>
+          ${t.examples.map((ex, i) => `
+            <div class="example-block">
+              <span class="example-label">Example ${String(i + 1).padStart(2, '0')}</span>
+              <div class="example-problem">${ex.problem}</div>
+              ${ex.steps.map(s => `<div class="example-step">${s}</div>`).join('')}
+              <div class="example-answer">Answer: ${ex.answer}</div>
+            </div>
+          `).join('')}
+        </div>` : ''}
+      </div>
+    </div>
 
     <div class="tip-block">
       <span class="tip-ico">→</span>
@@ -247,7 +302,7 @@ function learnPage() {
     </div>
 
     <div class="action-row">
-      <button class="btn btn-secondary" data-go="dashboard">← Dashboard</button>
+      <button class="btn btn-secondary" data-go="dashboard">← Back to Library</button>
       ${t.practiceGenerator ? `<button class="btn btn-primary" data-practice="${t.id}">Practice →</button>` : ''}
     </div>
   </div>`;
@@ -259,9 +314,9 @@ function memorizePage() {
   if (!t?.memoData) return '<div class="empty-state"><h3>No flashcard data</h3></div>';
 
   return `
-  <div class="learn-container">
+  <div>
     <div class="breadcrumbs">
-      <span class="crumb" data-go="dashboard">Dashboard</span>
+      <span class="crumb" data-go="dashboard">Modules</span>
       <span class="crumb-sep">›</span>
       <span class="crumb" data-topic="${t.id}">${t.title}</span>
       <span class="crumb-sep">›</span>
@@ -302,9 +357,9 @@ function practicePage() {
   const medal = progressStore.getMedal(t.id);
 
   return `
-  <div class="learn-container">
+  <div>
     <div class="breadcrumbs">
-      <span class="crumb" data-go="dashboard">Dashboard</span>
+      <span class="crumb" data-go="dashboard">Modules</span>
       <span class="crumb-sep">›</span>
       <span class="crumb" data-topic="${t.id}">${t.title}</span>
       <span class="crumb-sep">›</span>
@@ -349,7 +404,7 @@ function practicePage() {
         </div>
 
         <div class="config-group">
-          <span class="config-label">Mode</span>
+          <span class="config-label">Choose Your Practice Mode</span>
           <div class="mode-grid">
             <button class="mode-btn" data-mode="untimed">
               <span class="mode-medal">🥉</span>
@@ -373,23 +428,13 @@ function practicePage() {
             </button>
           </div>
         </div>
-        
-        <div class="config-group" style="margin-top:20px;">
-          <span class="config-label"># Questions</span>
-          <div class="mode-grid">
-            <button class="count-btn active" data-count="10">10 <span>(Medals)</span></button>
-            <button class="count-btn" data-count="25">25</button>
-            <button class="count-btn" data-count="50">50</button>
-            <button class="count-btn" data-count="999">Endless</button>
-          </div>
-        </div>
 
         <div class="custom-time-row" id="customTimeRow" style="display:none">
           <span class="config-label">Seconds per question</span>
           <input type="number" class="custom-time-input" id="customTimeInput" value="${customTime}" min="3" max="120" />
         </div>
 
-        <button class="btn btn-primary btn-lg btn-block" id="startBtn">Start Practice →</button>
+        <button class="btn btn-primary btn-lg btn-block" id="startBtn">Begin Practice →</button>
       </div>
     </div>
   </div>`;
@@ -427,7 +472,7 @@ function sessionPage() {
       <div class="q-text">${q.question}</div>
       <div class="answer-row">
         <input type="text" class="answer-field${ans?(ans.correct?' correct':' wrong'):''}"
-          id="answerInput" placeholder="Answer…"
+          id="answerInput" placeholder="Your answer…"
           ${ans ? 'disabled' : ''} value="${ans ? ans.given : ''}" autocomplete="off" />
         ${!ans ? '<button class="btn btn-primary" id="submitBtn">Submit</button>' : ''}
       </div>
@@ -442,6 +487,37 @@ function sessionPage() {
     <div class="session-btns">
       ${!ans ? `<button class="btn btn-ghost btn-sm" id="skipBtn">Skip</button>` : ''}
       <button class="btn btn-ghost btn-sm" id="endBtn">End Session</button>
+    </div>
+  </div>`;
+}
+
+// ── Interstitial ──────────────────────────────────────────────────
+function interstitialPage() {
+  if (!session) return '';
+  const { newMedal, topicId, answers } = session;
+  const t = getTopicById(topicId);
+  const correct = answers.slice(0, 10).filter(a => a?.correct).length;
+  
+  return `
+  <div class="session-container">
+    <div class="results-card${newMedal ? ` new-medal-${newMedal}` : ''}">
+      ${newMedal ? `
+        <div class="medal-earned-banner ${newMedal}">
+          <div class="medal-earned-icon">${newMedal === 'gold' ? '🥇' : newMedal === 'silver' ? '🥈' : '🥉'}</div>
+          <div class="medal-earned-text">
+            <strong>${newMedal.charAt(0).toUpperCase() + newMedal.slice(1)} Medal Earned!</strong>
+            <span>${t ? t.title : ''}</span>
+          </div>
+        </div>
+      ` : `
+        <h3>${correct === 10 ? 'Perfect 10/10!' : `10 Questions Complete — ${correct}/10`}</h3>
+      `}
+      <p class="sub">Would you like to keep practicing this topic endlessly, or view your full results?</p>
+      
+      <div class="results-actions">
+        <button class="btn btn-primary" id="continueEndlessBtn">Keep Practicing (Endless)</button>
+        <button class="btn btn-secondary" id="endSessionBtnFromInter">Finish & View Results</button>
+      </div>
     </div>
   </div>`;
 }
@@ -463,7 +539,7 @@ function resultsPage() {
   return `
   <div class="session-container">
     <div class="breadcrumbs">
-      <span class="crumb" data-go="dashboard">Dashboard</span>
+      <span class="crumb" data-go="dashboard">Modules</span>
       <span class="crumb-sep">›</span>
       <span class="crumb current">Results</span>
     </div>
@@ -478,7 +554,7 @@ function resultsPage() {
           </div>
         </div>
       ` : `
-        <h3>Session Complete! — ${acc >= 80 ? 'Great Job!' : acc >= 60 ? 'Good Effort!' : acc >= 40 ? 'Keep Practicing!' : 'Don\'t Give Up!'}</h3>
+        <h3>Session Complete! — ${acc >= 80 ? 'Great Job!' : acc >= 60 ? 'Good Effort!' : acc >= 40 ? 'Keep Practicing!' : "Don't Give Up!"}</h3>
       `}
       <p class="sub">${t ? t.title : 'Practice'} — ${modeLabel} — ${questions.length > 100 ? (session.idx+1) : questions.length} Questions</p>
 
@@ -528,7 +604,7 @@ function bind() {
 
   // Navigation
   document.querySelectorAll('[data-go]').forEach(el =>
-    el.addEventListener('click', () => { view = el.dataset.go; topicId = null; session = null; render(); }));
+    el.addEventListener('click', () => { view = el.dataset.go; topicId = null; session = null; activeCat = 'all'; render(); }));
 
   // Topic
   document.querySelectorAll('[data-topic]').forEach(el =>
@@ -545,6 +621,10 @@ function bind() {
   document.querySelectorAll('[data-practice]').forEach(el =>
     el.addEventListener('click', () => { topicId = el.dataset.practice; view = 'practice'; render(); }));
 
+  // Category filter pills
+  document.querySelectorAll('[data-cat]').forEach(el =>
+    el.addEventListener('click', () => { activeCat = el.dataset.cat; render(); }));
+
   // Mode buttons
   document.querySelectorAll('.mode-btn').forEach(el =>
     el.addEventListener('click', () => {
@@ -552,13 +632,6 @@ function bind() {
       el.classList.add('active');
       const row = document.getElementById('customTimeRow');
       if (row) row.style.display = el.dataset.mode === 'custom' ? 'block' : 'none';
-    }));
-
-  // Count buttons
-  document.querySelectorAll('.count-btn').forEach(el =>
-    el.addEventListener('click', () => {
-      document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('active'));
-      el.classList.add('active');
     }));
 
   // Start
@@ -595,6 +668,30 @@ function bind() {
 
   // End
   document.getElementById('endBtn')?.addEventListener('click', endSession);
+
+  // Interstitial
+  document.getElementById('continueEndlessBtn')?.addEventListener('click', () => {
+    view = 'session';
+    const t = getTopicById(session.topicId);
+    const lv = progressStore.data.level;
+    let q = t.practiceGenerator(lv);
+    let attempts = 0;
+    while (session.seen.has(q.question) && attempts < 25) {
+      q = t.practiceGenerator(lv);
+      attempts++;
+    }
+    session.seen.add(q.question);
+    session.questions.push(q);
+    session.answers.push(null);
+    session.timer = session.tpq;
+    render();
+    if (session.tpq) startTimer();
+  });
+
+  document.getElementById('endSessionBtnFromInter')?.addEventListener('click', () => {
+    view = 'results';
+    render();
+  });
 
   // Memo cards
   document.querySelectorAll('.memo-card').forEach(el =>
@@ -636,8 +733,7 @@ function startSession() {
     customTime = tpq;
   }
 
-  const countBtn = document.querySelector('.count-btn.active');
-  const count = parseInt(countBtn?.dataset.count) || 10;
+  const count = 10;
 
   const questions = [];
   const seen = new Set();
@@ -652,7 +748,7 @@ function startSession() {
     questions.push(q);
   }
 
-  session = { topicId, questions, idx: 0, answers: new Array(count).fill(null), mode, tpq, timer: tpq, interval: null, streak: 0, newMedal: null };
+  session = { topicId, questions, seen, idx: 0, answers: new Array(count).fill(null), mode, tpq, timer: tpq, interval: null, streak: 0, newMedal: null, recordedCount: 0, interstitialShown: false };
   view = 'session';
   render();
   if (tpq) startTimer();
@@ -673,40 +769,54 @@ function submitAnswer(given) {
 function nextQuestion() {
   if (!session) return;
   session.idx++;
-  if (session.idx >= session.questions.length) {
-    finishSession();
-  } else {
-    session.timer = session.tpq;
+  
+  if (session.idx === 10 && !session.interstitialShown) {
+    clearTimer();
+    session.interstitialShown = true;
+    view = 'interstitial';
+    
+    const correct = session.answers.slice(0, 10).filter(a => a?.correct).length;
+    const oldMedal = progressStore.getMedal(session.topicId);
+    progressStore.recordSession(session.topicId, correct, 10, session.mode);
+    
+    const newMedal = progressStore.getMedal(session.topicId);
+    session.newMedal = (newMedal !== oldMedal) ? newMedal : null;
+    session.recordedCount = 10;
+    
     render();
-    if (session.tpq) startTimer();
+    return;
   }
-}
 
-function finishSession() {
-  clearTimer();
-  view = 'results';
-  const correct = session.answers.filter(a => a?.correct).length;
-  const oldMedal = progressStore.getMedal(session.topicId);
+  if (session.idx >= session.questions.length) {
+    const t = getTopicById(session.topicId);
+    const lv = progressStore.data.level;
+    let q = t.practiceGenerator(lv);
+    let attempts = 0;
+    while (session.seen.has(q.question) && attempts < 25) {
+      q = t.practiceGenerator(lv);
+      attempts++;
+    }
+    session.seen.add(q.question);
+    session.questions.push(q);
+    session.answers.push(null);
+  }
 
-  progressStore.recordSession(session.topicId, correct, session.questions.length, session.mode);
-
-  const newMedal = progressStore.getMedal(session.topicId);
-  session.newMedal = (newMedal !== oldMedal) ? newMedal : null;
-
+  session.timer = session.tpq;
   render();
+  if (session.tpq) startTimer();
 }
 
 function endSession() {
   clearTimer();
   if (session) {
     const answered = session.answers.filter(a => a);
-    if (answered.length) {
-      const correct = answered.filter(a => a.correct).length;
+    if (answered.length > session.recordedCount) {
+      const unrecordedAnswers = answered.slice(session.recordedCount);
+      const correct = unrecordedAnswers.filter(a => a.correct).length;
       session.questions = session.questions.slice(0, session.idx + 1);
       session.answers = session.answers.slice(0, session.idx + 1);
-      progressStore.recordSession(session.topicId, correct, answered.length, session.mode);
+      progressStore.recordSession(session.topicId, correct, unrecordedAnswers.length, session.mode);
     }
-    session.newMedal = null;
     view = 'results';
     render();
   }

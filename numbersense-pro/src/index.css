@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Public+Sans:wght@400;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Public Sans", sans-serif;
+
+  --color-primary: #0b3a89;
+  --color-primary-container: #2d52a2;
+  --color-on-primary-container: #b8caff;
+  --color-secondary: #b90c17;
+  --color-secondary-container: #de2e2c;
+  --color-background: #f9f9ff;
+  --color-surface-container: #e7eeff;
+  --color-surface-container-low: #f0f3ff;
+  --color-surface-container-lowest: #ffffff;
+  --color-on-surface: #111c2d;
+  --color-on-surface-variant: #434651;
+  --color-outline-variant: #c4c6d3;
+
+  --radius-xl: 0.75rem;
+}
+
+@utility tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-on-surface antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
